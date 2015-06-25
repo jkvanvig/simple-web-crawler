@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Configuration monitorInterval="5">
+	<Appenders>
+		<Console name="root" target="SYSTEM_OUT">
+			<PatternLayout pattern="%level %logger{1} - %message%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<AsyncLogger name="webcrawler" level="info" additivity="false">
+			<AppenderRef ref="root" />
+		</AsyncLogger>
+		<AsyncLogger name="org.springframework" level="warn"
+			additivity="false">
+			<AppenderRef ref="root" />
+		</AsyncLogger>
+		<AsyncRoot level="info">
+			<AppenderRef ref="root" />
+		</AsyncRoot>
+	</Loggers>
+</Configuration>

@@ -1,0 +1,46 @@
+<div class="section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<h2>Web Crawler for single domain</h2>
+				<hr>
+			</div>
+			<div id="siteToString" class="col-lg-12"></div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 col-md-4">
+				<div>Base URL to crawl:</div>
+				<input type="text" ng-model="baseUrl" />
+				<div>Max URLs to crawl:</div>
+				<input type="text" ng-model="maxSites" /><br> <input
+					type="button" value="Crawl (in memory)" ng-click="crawlInMemory();" />
+				<input type="button" value="Crawl (persistent)"
+					ng-click="crawlFileStore();" />
+			</div>
+		</div>
+	</div>
+</div>
+<div class="section-colored">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<h4>Site Graph: {{baseUrl}}</h4>
+				<hr>
+			</div>
+			<div id="siteToString" class="col-lg-12"></div>
+		</div>
+	</div>
+
+	<div id="links" class="container"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<h4>Static Assets Graph: {{baseUrl}}</h4>
+				<hr>
+			</div>
+		</div>
+	</div>
+	<div id="staticAssets" class="container"></div>
+</div>
