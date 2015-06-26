@@ -1,6 +1,8 @@
 package webcrawler.controllers.helpers;
 
+import java.util.HashSet;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
@@ -37,7 +39,10 @@ public class WebCrawlerCallable implements Callable<SiteGraphNode> {
   @Override
   public SiteGraphNode call() throws Exception {
     logger.entry();
-    String absoluteUrl = urlQueue.poll();
+    String absoluteUrl;
+    synchronized (urlQueue) {
+      absoluteUrl = urlQueue.poll();
+    }
     if (absoluteUrl == null)
       return logger.exit(null);
     String relativeUrl = siteGraphHelper.getRelativeUrl(siteGraph.getBaseUrl(), absoluteUrl);
@@ -65,6 +70,7 @@ public class WebCrawlerCallable implements Callable<SiteGraphNode> {
     
     // get all links and recursively call the processPage method
     Elements as = doc.select("a[href]");
+    Set<String> linkHrefs = new HashSet<>(as.size());
     for (Element a : as) {
       if (siteGraph.size() >= maxSize)
         break;
@@ -72,12 +78,15 @@ public class WebCrawlerCallable implements Callable<SiteGraphNode> {
       if (absoluteHref.startsWith(siteGraph.getBaseUrl()) && !absoluteHref.endsWith(".png") &&
           !absoluteHref.endsWith(".zip") && !absoluteHref.endsWith(".eps")) {
         logger.trace("Adding link: {}", absoluteHref);
-        urlQueue.add(absoluteHref);
+        linkHrefs.add(absoluteHref);
         siteGraph.addLink(siteGraphNode, siteGraph.addSiteGraphNode(siteGraphHelper.getRelativeUrl(
             siteGraph.getBaseUrl(), absoluteHref)));
       } else {
         logger.trace("Skipping link: {}", absoluteHref);
       }
+    }
+    synchronized (urlQueue) {
+      urlQueue.addAll(linkHrefs);
     }
     return logger.exit(siteGraphNode);
   }

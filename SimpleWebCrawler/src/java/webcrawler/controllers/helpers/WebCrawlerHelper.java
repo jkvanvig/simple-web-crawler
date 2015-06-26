@@ -25,6 +25,8 @@ public class WebCrawlerHelper {
   @Autowired
   protected JsoupHelper jsoupHelper;
   
+  protected ThreadPoolExecutor pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(8);
+  
   public WebCrawlerHelper() {
     this.clearData();
   }
@@ -40,14 +42,12 @@ public class WebCrawlerHelper {
   
   public void crawlDomain(SiteGraph siteGraph, String absoluteUrl, long maxSize) throws Exception {
     logger.entry(absoluteUrl, maxSize);
-    ThreadPoolExecutor pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
     Queue<String> urlQueue = new ConcurrentLinkedQueue<>();
     urlQueue.add(absoluteUrl);
-    while (!urlQueue.isEmpty() || pool.getActiveCount() > 0) {
+    while (siteGraph.size() < maxSize && (!urlQueue.isEmpty() || pool.getActiveCount() > 0)) {
       pool.submit(new WebCrawlerCallable(pool, siteGraphHelper, jsoupHelper, siteGraph, urlQueue,
           maxSize));
     }
-    pool.shutdown();
     logger.exit();
   }
   
