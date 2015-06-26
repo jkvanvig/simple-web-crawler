@@ -8,8 +8,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
  * This class has a main method that starts an embedded Jetty server. To use, simply run it as a
- * java application. After startup, the Swagger documentation should be available at
- * http://localhost:8080/web-crawler
+ * java application. After startup, the application will be available at:
+ * http://localhost:8080/simple-web-crawler
  */
 public class JettyServer {
   

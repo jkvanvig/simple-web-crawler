@@ -76,7 +76,7 @@ public class WebCrawlerController {
     millis = System.currentTimeMillis() - millis;
     logger.info("crawled in {} ms", millis);
     
-    if (siteGraph.size() <= 250) {
+    if (siteGraph.size() <= 1000) {
       Map<String, Collection<DirectedEdge>> edgesMap =
           new HashMap<String, Collection<DirectedEdge>>();
       edgesMap.put("links", siteGraph.linksDirectedEdges());
