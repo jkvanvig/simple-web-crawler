@@ -53,7 +53,6 @@ Since MapDB contains implementations of Java's HashMap and HashSet, the data str
 is identical to the in-memory data structure, and shares most of the same source code.
 
 ### Future improvements
-* The front end has no validation of user input, as most of my time has been spent on the server-side implementation.
-* There may be a better front-end graph library to use for displaying very large graphs.
-* It would be helpful to add an option to allow the user to specify a maximum depth - i.e. for depth 2, "example.com/users" 
-would be valid but "example.com/users/jared" would be ignored.
+* Front end - the page styles could use some work, there's no validation of user input yet, and there may be a 
+better graph library to use for displaying very large graphs.
+* It would be helpful to add an option to allow the user to specify a maximum depth - i.e. for depth 2, "example.com/users" would be valid but "example.com/users/jared" would be ignored.
