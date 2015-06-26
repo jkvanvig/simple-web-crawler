@@ -52,8 +52,11 @@ public class WebCrawlerHelper {
   }
   
   public void clearData() {
+    logger.entry();
     File dataDir = new File("data/").getAbsoluteFile();
     for (File file : dataDir.listFiles())
-      file.delete();
+      if (!".gitignore".equals(file.getName()))
+        file.delete();
+    logger.exit();
   }
 }
