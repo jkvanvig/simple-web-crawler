@@ -1,11 +1,11 @@
 package webcrawler.controllers.helpers;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import webcrawler.models.SiteGraph;
-import webcrawler.models.SiteGraphNode;
 
 @Component
 public class WebCrawlerHelper {
@@ -25,6 +24,10 @@ public class WebCrawlerHelper {
   
   @Autowired
   protected JsoupHelper jsoupHelper;
+  
+  public WebCrawlerHelper() {
+    this.clearData();
+  }
   
   public String findBaseUrl(String url) throws IOException {
     logger.entry(url);
@@ -37,17 +40,20 @@ public class WebCrawlerHelper {
   
   public void crawlDomain(SiteGraph siteGraph, String absoluteUrl, long maxSize) throws Exception {
     logger.entry(absoluteUrl, maxSize);
-    ExecutorService pool = Executors.newFixedThreadPool(10);
-    Queue<String> urlQueue = new ConcurrentLinkedDeque<>();
+    ThreadPoolExecutor pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
+    Queue<String> urlQueue = new ConcurrentLinkedQueue<>();
     urlQueue.add(absoluteUrl);
-    while (!urlQueue.isEmpty()) {
-      Future<SiteGraphNode> future =
-          pool.submit(new WebCrawlerCallable(pool, siteGraphHelper, jsoupHelper, siteGraph,
-              urlQueue, maxSize));
-      while (!future.isDone());
-      
+    while (!urlQueue.isEmpty() || pool.getActiveCount() > 0) {
+      pool.submit(new WebCrawlerCallable(pool, siteGraphHelper, jsoupHelper, siteGraph, urlQueue,
+          maxSize));
     }
     pool.shutdown();
     logger.exit();
+  }
+  
+  public void clearData() {
+    File dataDir = new File("data/").getAbsoluteFile();
+    for (File file : dataDir.listFiles())
+      file.delete();
   }
 }

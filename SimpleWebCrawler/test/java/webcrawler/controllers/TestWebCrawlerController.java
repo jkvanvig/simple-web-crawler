@@ -45,9 +45,11 @@ public class TestWebCrawlerController {
   
   @Test
   public void testCrawlPersistent() throws Exception {
-    WebCrawlerHelper helper = EasyMock.createMock(WebCrawlerHelper.class);
     String baseUrl = "http://blah.com";
+    
+    WebCrawlerHelper helper = EasyMock.createMock(WebCrawlerHelper.class);
     EasyMock.expect(helper.findBaseUrl("blah.com")).andReturn(baseUrl);
+    helper.clearData();
     helper.crawlDomain(EasyMock.anyObject(InMemorySiteGraph.class), EasyMock.anyString(),
         EasyMock.anyLong());
     EasyMock.replay(helper);

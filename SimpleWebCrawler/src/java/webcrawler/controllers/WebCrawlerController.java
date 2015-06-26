@@ -32,12 +32,6 @@ public class WebCrawlerController {
   @Autowired
   protected WebCrawlerHelper webCrawlerHelper;
   
-  public WebCrawlerController() {
-    File dataDir = new File("data/").getAbsoluteFile();
-    for (File file : dataDir.listFiles())
-      file.delete();
-  }
-  
   @RequestMapping(value = "/")
   public ModelAndView getCrawler() {
     return new ModelAndView("index");
@@ -48,19 +42,21 @@ public class WebCrawlerController {
   public Object crawlInMemory(@RequestBody Map<String, String> data) throws Exception {
     logger.entry(data);
     String baseUrl = webCrawlerHelper.findBaseUrl(data.get("baseUrl"));
-    Object edgesMap = crawl(data, baseUrl, new InMemorySiteGraph(baseUrl));
-    return logger.exit(edgesMap);
+    logger.info("crawling {} in memory", baseUrl);
+    return logger.exit(crawl(data, baseUrl, new InMemorySiteGraph(baseUrl)));
   }
   
   @ResponseBody
   @RequestMapping(value = "/crawl/persistent", method = RequestMethod.POST)
   public Object crawlPersistent(@RequestBody Map<String, String> data) throws Exception {
     logger.entry(data);
+    webCrawlerHelper.clearData();
     String baseUrl = webCrawlerHelper.findBaseUrl(data.get("baseUrl"));
     File storageFile = new File("data/" + baseUrl.hashCode() + ".mapdb").getAbsoluteFile();
     if (storageFile.exists())
       storageFile.delete();
     storageFile.createNewFile();
+    logger.info("crawling {} with file store", baseUrl);
     return logger.exit(crawl(data, baseUrl,
         new FileStoreSiteGraph(baseUrl, DBMaker.newFileDB(storageFile).make())));
   }
@@ -80,8 +76,11 @@ public class WebCrawlerController {
           new HashMap<String, Collection<DirectedEdge>>();
       edgesMap.put("links", siteGraph.linksDirectedEdges());
       edgesMap.put("staticAssets", siteGraph.staticAssetsDirectedEdges());
+      logger.info("Returning {} nodes, {} links edges, {} static asset edges.", siteGraph.size(),
+          edgesMap.get("links").size(), edgesMap.get("staticAssets").size());;
       return edgesMap;
     }
+    logger.info("Graph is too large for the JS library.  Returning a simple list instead.");
     return siteGraph.toHtml();
   }
 }

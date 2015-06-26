@@ -37,7 +37,9 @@ public class WebCrawlerCallable implements Callable<SiteGraphNode> {
   @Override
   public SiteGraphNode call() throws Exception {
     logger.entry();
-    String absoluteUrl = urlQueue.remove();
+    String absoluteUrl = urlQueue.poll();
+    if (absoluteUrl == null)
+      return logger.exit(null);
     String relativeUrl = siteGraphHelper.getRelativeUrl(siteGraph.getBaseUrl(), absoluteUrl);
     
     // Initial validation - make sure we haven't already seen this page

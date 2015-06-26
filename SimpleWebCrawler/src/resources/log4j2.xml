@@ -7,7 +7,7 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<AsyncLogger name="webcrawler" level="debug" additivity="false">
+		<AsyncLogger name="webcrawler" level="info" additivity="false">
 			<AppenderRef ref="root" />
 		</AsyncLogger>
 		<AsyncLogger name="org.springframework" level="warn"
