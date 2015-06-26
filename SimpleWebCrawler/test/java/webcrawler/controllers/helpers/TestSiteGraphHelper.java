@@ -1,11 +1,11 @@
-package webcrawler.helpers;
+package webcrawler.controllers.helpers;
 
 import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import webcrawler.helpers.SiteGraphHelper;
+import webcrawler.controllers.helpers.SiteGraphHelper;
 import webcrawler.models.SiteGraph;
 import webcrawler.stubs.StubResponse;
 

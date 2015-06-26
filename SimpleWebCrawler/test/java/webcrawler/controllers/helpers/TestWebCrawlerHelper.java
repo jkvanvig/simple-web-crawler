@@ -1,4 +1,4 @@
-package webcrawler.helpers;
+package webcrawler.controllers.helpers;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -15,9 +15,6 @@ import org.jsoup.select.Elements;
 import org.junit.Assert;
 import org.junit.Test;
 
-import webcrawler.helpers.JsoupHelper;
-import webcrawler.helpers.SiteGraphHelper;
-import webcrawler.helpers.WebCrawlerHelper;
 import webcrawler.models.InMemorySiteGraph;
 import webcrawler.models.SiteGraph;
 import webcrawler.models.SiteGraphNode;

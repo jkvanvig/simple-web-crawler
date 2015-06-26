@@ -8,7 +8,7 @@ app.config([ '$routeProvider', function($routeProvider) {
 } ]);
 
 app.controller('PageCtrl', function($scope, $http) {
-    $scope.baseUrl = "";
+    $scope.baseUrl = "github.com/jdkn74/empty-repo";
     var crawl = function(crawlUrl) {
 	$("#links").empty();
 	$("#staticAssets").empty();

@@ -1,4 +1,4 @@
-package webcrawler.helpers;
+package webcrawler.controllers.helpers;
 
 import java.io.IOException;
 
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import webcrawler.models.SiteGraph;
-import webcrawler.threads.RunnableWebCrawler;
 
 @Component
 public class WebCrawlerHelper {
@@ -32,7 +31,7 @@ public class WebCrawlerHelper {
   
   public void crawlDomain(SiteGraph siteGraph, String absoluteUrl, long maxSize) throws IOException {
     logger.entry(absoluteUrl, maxSize);
-    new RunnableWebCrawler(siteGraphHelper, jsoupHelper, siteGraph, absoluteUrl, maxSize).run();
+    new WebCrawlerRunnable(siteGraphHelper, jsoupHelper, siteGraph, absoluteUrl, maxSize).run();
     logger.exit();
   }
 }

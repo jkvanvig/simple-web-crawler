@@ -1,13 +1,3 @@
-/* 
-Custom CSS for...
-'Modern Business' HTML Theme by Start Bootstrap
-
-All Start Bootstrap themes are licensed under Apache 2.0. 
-For more info and more free Bootstrap 3 HTML themes, visit http://startbootstrap.com!
-*/
-
-/* Global Styles */
-
 html, body {
     height: 100%;
 }
@@ -32,7 +22,6 @@ body {
     margin-top: 15px;
 }
 
-/* Page Sections */
 .section,
 .section-colored {
     padding: 50px 0;
@@ -53,7 +42,6 @@ body {
     border: 1px solid #cccccc;
 }
 
-/* Half Page Height Carousel Customization */
 .carousel {
     height: 50%;
 }
@@ -71,7 +59,6 @@ body {
     background-size: cover;
 }
 
-/* Social Icons Styles */
 .list-social-icons {
     margin-bottom: 45px;
 }
@@ -97,17 +84,14 @@ body {
     color: #d14836;
 }
 
-/* Service Page Styles */
 .service-icon {
     font-size: 50px;
 }
 
-/* 404 Page Styles */
 .error-404 {
     font-size: 8em;
 }
 
-/* Pricing Page Styles */
 .price {
     font-size: 4em;
 }
@@ -122,16 +106,6 @@ body {
     font-style: italic;
 }
 
-/* Footer Styles */
 footer {
     margin: 50px 0;
-}
-
-/* Responsive Styles */
-@media (max-width: 767px) {
-
-    .carousel {
-        height: 70%;
-        /* increases the carousel height so it looks good on phones */
-    }
 }

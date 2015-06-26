@@ -1,4 +1,4 @@
-package webcrawler.helpers;
+package webcrawler.controllers.helpers;
 
 import java.io.IOException;
 

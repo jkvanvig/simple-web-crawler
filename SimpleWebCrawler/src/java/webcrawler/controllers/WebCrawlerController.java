@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import webcrawler.helpers.WebCrawlerHelper;
+import webcrawler.controllers.helpers.WebCrawlerHelper;
 import webcrawler.models.DirectedEdge;
 import webcrawler.models.InMemorySiteGraph;
 import webcrawler.models.SiteGraph;

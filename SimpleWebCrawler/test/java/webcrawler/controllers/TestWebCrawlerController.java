@@ -9,7 +9,7 @@ import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 
-import webcrawler.helpers.WebCrawlerHelper;
+import webcrawler.controllers.helpers.WebCrawlerHelper;
 import webcrawler.models.InMemorySiteGraph;
 
 public class TestWebCrawlerController {
