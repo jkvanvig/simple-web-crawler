@@ -11,11 +11,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mapdb.DBMaker;
 
-import webcrawler.models.DirectedEdge;
-import webcrawler.models.InMemorySiteGraph;
-import webcrawler.models.SiteGraph;
-import webcrawler.models.SiteGraphNode;
-import webcrawler.models.StaticAsset;
 import webcrawler.models.persistent.FileStoreSiteGraph;
 
 public class TestSiteGraph {
@@ -25,7 +20,8 @@ public class TestSiteGraph {
   public static void cleanupData() {
     File dataDir = new File("data/").getAbsoluteFile();
     for (File file : dataDir.listFiles())
-      file.delete();
+      if (!".gitignore".equals(file.getName()))
+        file.delete();
   }
   
   @Test

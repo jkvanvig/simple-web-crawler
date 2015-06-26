@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,16 +18,14 @@ import webcrawler.models.SiteGraphNode;
 public class WebCrawlerCallable implements Callable<SiteGraphNode> {
   private static final Logger logger = LogManager.getLogger(WebCrawlerCallable.class);
   
-  protected final ExecutorService pool;
   protected SiteGraphHelper siteGraphHelper;
   protected JsoupHelper jsoupHelper;
   protected SiteGraph siteGraph;
   protected Queue<String> urlQueue;
   protected long maxSize;
   
-  public WebCrawlerCallable(ExecutorService pool, SiteGraphHelper siteGraphHelper,
-      JsoupHelper jsoupHelper, SiteGraph siteGraph, Queue<String> urlQueue, long maxSize) {
-    this.pool = pool;
+  public WebCrawlerCallable(SiteGraphHelper siteGraphHelper, JsoupHelper jsoupHelper,
+      SiteGraph siteGraph, Queue<String> urlQueue, long maxSize) {
     this.siteGraphHelper = siteGraphHelper;
     this.jsoupHelper = jsoupHelper;
     this.siteGraph = siteGraph;
@@ -63,7 +60,10 @@ public class WebCrawlerCallable implements Callable<SiteGraphNode> {
     
     Document doc = jsoupHelper.parseResponse(resp);
     
-    SiteGraphNode siteGraphNode = siteGraph.addParsedSiteGraphNode(relativeUrl);
+    SiteGraphNode siteGraphNode;
+    if (siteGraph.contains(relativeUrl) || siteGraph.size() >= maxSize)
+      return logger.exit(null);
+    siteGraphNode = siteGraph.addParsedSiteGraphNode(relativeUrl);
     
     // get all script, img, stylesheet, and icon dependencies
     siteGraphHelper.addStaticAssets(siteGraph, siteGraphNode, doc);

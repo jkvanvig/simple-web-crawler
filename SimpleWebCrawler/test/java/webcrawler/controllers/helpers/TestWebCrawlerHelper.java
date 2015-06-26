@@ -323,8 +323,7 @@ public class TestWebCrawlerHelper {
     
     Assert.assertNotNull(siteGraph.findSiteGraphNode(""));
     
-    // Graph-level properties - make sure we have 7 nodes, but only 4 are valid, parsed pages. 2 are
-    // only url parts, not unique pages, and one returned a 404.
+    // Graph-level properties - only have two nodes since the max was 2.
     Assert.assertEquals(2, siteGraph.size());
   }
   

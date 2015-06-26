@@ -18,14 +18,14 @@ import webcrawler.models.SiteGraph;
 @Component
 public class WebCrawlerHelper {
   private final Logger logger = LogManager.getLogger(this.getClass());
-  
+  private final int POOL_SIZE = 10;
   @Autowired
   protected SiteGraphHelper siteGraphHelper;
   
   @Autowired
   protected JsoupHelper jsoupHelper;
   
-  protected ThreadPoolExecutor pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(8);
+  protected ThreadPoolExecutor pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(POOL_SIZE);
   
   public WebCrawlerHelper() {
     this.clearData();
@@ -44,10 +44,16 @@ public class WebCrawlerHelper {
     logger.entry(absoluteUrl, maxSize);
     Queue<String> urlQueue = new ConcurrentLinkedQueue<>();
     urlQueue.add(absoluteUrl);
-    while (siteGraph.size() < maxSize && (!urlQueue.isEmpty() || pool.getActiveCount() > 0)) {
-      pool.submit(new WebCrawlerCallable(pool, siteGraphHelper, jsoupHelper, siteGraph, urlQueue,
-          maxSize));
+    while (!urlQueue.isEmpty() && siteGraph.size() < maxSize) {
+      while (siteGraph.size() < maxSize && !urlQueue.isEmpty() || pool.getActiveCount() > 0 ||
+          !pool.getQueue().isEmpty()) {
+        if (!urlQueue.isEmpty() && pool.getActiveCount() < POOL_SIZE)
+          pool.submit(new WebCrawlerCallable(siteGraphHelper, jsoupHelper, siteGraph, urlQueue,
+              maxSize));
+      }
+      Thread.sleep(100);
     }
+    pool.purge();
     logger.exit();
   }
   

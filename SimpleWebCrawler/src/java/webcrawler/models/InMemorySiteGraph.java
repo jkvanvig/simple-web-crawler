@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemorySiteGraph extends SiteGraph {
   public InMemorySiteGraph(String baseUrl) {
@@ -66,7 +65,7 @@ public class InMemorySiteGraph extends SiteGraph {
     SiteGraphNode newNode = new SiteGraphNode(value, parent);
     newNode.setLinks(new LinkedHashSet<>());
     newNode.setStaticAssets(new LinkedHashSet<>());
-    newNode.setSubNodes(new ConcurrentHashMap<>());
+    newNode.setSubNodes(new LinkedHashMap<>());
     return newNode;
   }
 }
