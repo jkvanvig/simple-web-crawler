@@ -1,6 +1,8 @@
 package webcrawler.controllers.helpers;
 
 import java.io.IOException;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -35,11 +37,17 @@ public class WebCrawlerHelper {
   
   public void crawlDomain(SiteGraph siteGraph, String absoluteUrl, long maxSize) throws Exception {
     logger.entry(absoluteUrl, maxSize);
-    ExecutorService pool = Executors.newCachedThreadPool();
-    Future<SiteGraphNode> root =
-        pool.submit(new WebCrawlerCallable(pool, siteGraphHelper, jsoupHelper, siteGraph,
-            absoluteUrl, maxSize));
-    root.get();
+    ExecutorService pool = Executors.newFixedThreadPool(10);
+    Queue<String> urlQueue = new ConcurrentLinkedDeque<>();
+    urlQueue.add(absoluteUrl);
+    while (!urlQueue.isEmpty()) {
+      Future<SiteGraphNode> future =
+          pool.submit(new WebCrawlerCallable(pool, siteGraphHelper, jsoupHelper, siteGraph,
+              urlQueue, maxSize));
+      while (!future.isDone());
+      
+    }
+    pool.shutdown();
     logger.exit();
   }
 }

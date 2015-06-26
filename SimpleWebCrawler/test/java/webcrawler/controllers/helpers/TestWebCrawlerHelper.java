@@ -245,7 +245,7 @@ public class TestWebCrawlerHelper {
     // Graph-level properties - make sure we have 7 nodes, but only 4 are valid, parsed pages. 2 are
     // only url parts, not unique pages, and one returned a 404.
     Assert.assertEquals(4, siteGraph.size());
-    Assert.assertEquals(6, siteGraph.totalSize());
+    Assert.assertEquals(7, siteGraph.totalSize());
     Assert.assertTrue(siteGraph.contains(""));
     Assert.assertTrue(siteGraph.contains("sub1"));
     Assert.assertTrue(siteGraph.contains("sub2"));
@@ -261,7 +261,7 @@ public class TestWebCrawlerHelper {
     Assert.assertNotNull(sub3Node);
     Assert.assertNotNull(secondLevelNode);
     Assert.assertNotNull(third1Node);
-    Assert.assertNull(invalidNode);
+    Assert.assertNotNull(invalidNode);
     
     // Base node
     Assert.assertEquals(3, baseNode.getLinks().size());
@@ -269,11 +269,11 @@ public class TestWebCrawlerHelper {
     Assert.assertTrue(baseNode.getLinks().contains(sub2Node));
     Assert.assertTrue(baseNode.getLinks().contains(third1Node));
     Assert.assertEquals(6, baseNode.getStaticAssets().size());
-    Assert.assertEquals(3, baseNode.getSubNodes().size());
+    Assert.assertEquals(4, baseNode.getSubNodes().size());
     Assert.assertTrue(baseNode.getSubNodes().containsKey("sub1"));
     Assert.assertTrue(baseNode.getSubNodes().containsKey("sub2"));
     Assert.assertTrue(baseNode.getSubNodes().containsKey("sub3"));
-    Assert.assertFalse(baseNode.getSubNodes().containsKey("invalid"));
+    Assert.assertTrue(baseNode.getSubNodes().containsKey("invalid"));
     Assert.assertEquals(sub1Node, baseNode.getSubNodes().get("sub1"));
     Assert.assertEquals(sub2Node, baseNode.getSubNodes().get("sub2"));
     Assert.assertEquals(sub3Node, baseNode.getSubNodes().get("sub3"));
@@ -309,7 +309,7 @@ public class TestWebCrawlerHelper {
     Assert.assertEquals(third1Node, secondLevelNode.getSubNodes().get("third1"));
     
     // Third1 node links
-    Assert.assertEquals(1, third1Node.getLinks().size());
+    Assert.assertEquals(2, third1Node.getLinks().size());
     Assert.assertTrue(third1Node.getLinks().contains(baseNode));
     Assert.assertEquals(7, third1Node.getStaticAssets().size());
     Assert.assertEquals(0, third1Node.getSubNodes().size());
