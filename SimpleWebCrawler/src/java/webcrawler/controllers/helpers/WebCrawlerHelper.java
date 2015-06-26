@@ -1,6 +1,9 @@
 package webcrawler.controllers.helpers;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import webcrawler.models.SiteGraph;
+import webcrawler.models.SiteGraphNode;
 
 @Component
 public class WebCrawlerHelper {
@@ -29,9 +33,13 @@ public class WebCrawlerHelper {
         : null);
   }
   
-  public void crawlDomain(SiteGraph siteGraph, String absoluteUrl, long maxSize) throws IOException {
+  public void crawlDomain(SiteGraph siteGraph, String absoluteUrl, long maxSize) throws Exception {
     logger.entry(absoluteUrl, maxSize);
-    new WebCrawlerRunnable(siteGraphHelper, jsoupHelper, siteGraph, absoluteUrl, maxSize).run();
+    ExecutorService pool = Executors.newCachedThreadPool();
+    Future<SiteGraphNode> root =
+        pool.submit(new WebCrawlerCallable(pool, siteGraphHelper, jsoupHelper, siteGraph,
+            absoluteUrl, maxSize));
+    root.get();
     logger.exit();
   }
 }

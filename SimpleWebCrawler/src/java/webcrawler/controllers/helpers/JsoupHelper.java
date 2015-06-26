@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class JsoupHelper {
   private final Logger logger = LogManager.getLogger(this.getClass());
   
-  public Response connect(String url) {
+  public Response connect(String url) throws IOException {
     logger.entry(url);
     Connection con =
         Jsoup
@@ -28,24 +28,16 @@ public class JsoupHelper {
             .timeout(10000);
     
     Response resp;
-    try {
+    resp = con.execute();
+    for (int retries = 0; retries < 3 && resp.statusCode() < 200 && resp.statusCode() >= 300; retries++)
       resp = con.execute();
-      for (int retries = 0; retries < 3 && resp.statusCode() < 200 && resp.statusCode() >= 300; retries++)
-        resp = con.execute();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
     
     return logger.exit(resp);
   }
   
-  public Document parseResponse(Response resp) {
+  public Document parseResponse(Response resp) throws IOException {
     Document doc;
-    try {
-      doc = resp.parse();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    doc = resp.parse();
     return doc;
   }
 }

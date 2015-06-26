@@ -1,7 +1,6 @@
 package webcrawler.controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +14,7 @@ import webcrawler.models.InMemorySiteGraph;
 public class TestWebCrawlerController {
   
   @Test
-  public void testCrawlInMemorySmall() throws IOException {
+  public void testCrawlInMemorySmall() throws Exception {
     WebCrawlerHelper helper = EasyMock.createMock(WebCrawlerHelper.class);
     EasyMock.expect(helper.findBaseUrl("blah.com")).andReturn("http://blah.com");
     helper.crawlDomain(EasyMock.anyObject(InMemorySiteGraph.class), EasyMock.anyString(),
@@ -30,7 +29,7 @@ public class TestWebCrawlerController {
   }
   
   @Test
-  public void testCrawlInMemoryLarge() throws IOException {
+  public void testCrawlInMemoryLarge() throws Exception {
     WebCrawlerHelper helper = EasyMock.createMock(WebCrawlerHelper.class);
     EasyMock.expect(helper.findBaseUrl("blah.com")).andReturn("http://blah.com");
     helper.crawlDomain(EasyMock.anyObject(InMemorySiteGraph.class), EasyMock.anyString(),
@@ -45,7 +44,7 @@ public class TestWebCrawlerController {
   }
   
   @Test
-  public void testCrawlPersistent() throws IOException {
+  public void testCrawlPersistent() throws Exception {
     WebCrawlerHelper helper = EasyMock.createMock(WebCrawlerHelper.class);
     String baseUrl = "http://blah.com";
     EasyMock.expect(helper.findBaseUrl("blah.com")).andReturn(baseUrl);

@@ -1,18 +1,15 @@
 package webcrawler.controllers.helpers;
 
-import java.io.IOException;
-
 import org.junit.Assert;
 import org.junit.Test;
 
-import webcrawler.controllers.helpers.SiteGraphHelper;
 import webcrawler.models.SiteGraph;
 import webcrawler.stubs.StubResponse;
 
 public class TestSiteGraphHelper {
   
   @Test
-  public void testValidate() throws IOException {
+  public void testValidate() throws Exception {
     SiteGraphHelper helper = new SiteGraphHelper();
     
     SiteGraph siteGraph = TestWebCrawlerHelper.crawlDomainForSiteGraph("http://dummyurl.com/", 5);
@@ -22,7 +19,7 @@ public class TestSiteGraphHelper {
   }
   
   @Test
-  public void testRevalidate() throws IOException {
+  public void testRevalidate() throws Exception {
     SiteGraphHelper helper = new SiteGraphHelper();
     
     SiteGraph siteGraph = TestWebCrawlerHelper.crawlDomainForSiteGraph("http://dummyurl.com/", 5);

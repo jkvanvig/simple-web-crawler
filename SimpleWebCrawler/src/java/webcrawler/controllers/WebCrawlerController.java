@@ -1,7 +1,6 @@
 package webcrawler.controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class WebCrawlerController {
   
   @ResponseBody
   @RequestMapping(value = "/crawl/in-memory", method = RequestMethod.POST)
-  public Object crawlInMemory(@RequestBody Map<String, String> data) throws IOException {
+  public Object crawlInMemory(@RequestBody Map<String, String> data) throws Exception {
     logger.entry(data);
     String baseUrl = webCrawlerHelper.findBaseUrl(data.get("baseUrl"));
     Object edgesMap = crawl(data, baseUrl, new InMemorySiteGraph(baseUrl));
@@ -55,7 +54,7 @@ public class WebCrawlerController {
   
   @ResponseBody
   @RequestMapping(value = "/crawl/persistent", method = RequestMethod.POST)
-  public Object crawlPersistent(@RequestBody Map<String, String> data) throws IOException {
+  public Object crawlPersistent(@RequestBody Map<String, String> data) throws Exception {
     logger.entry(data);
     String baseUrl = webCrawlerHelper.findBaseUrl(data.get("baseUrl"));
     File storageFile = new File("data/" + baseUrl.hashCode() + ".mapdb").getAbsoluteFile();
@@ -67,7 +66,7 @@ public class WebCrawlerController {
   }
   
   private Object crawl(Map<String, String> data, String baseUrl, SiteGraph siteGraph)
-      throws IOException {
+      throws Exception {
     long maxSize =
         StringUtils.isEmpty(data.get("maxSites")) ? Long.MAX_VALUE : Long.parseLong(data
             .get("maxSites"));
