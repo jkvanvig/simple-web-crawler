@@ -48,5 +48,5 @@ node in the graphs that are displayed.
 There are two options on the page - "crawl (in memory)", and "crawl (persistent)".  Although most sites can be crawled using the "in memory" approach, some very large websites have too many pages to store and will cause the JVM to run out of heap space.  The "persistent" version uses MapDB file-based databases to store most of the information in the graph, which make it the safer of the two options for large sites, although it's several times slower as a result. Since MapDB contains implementations of Java's HashMap and HashSet, the data structure used for this implementation is identical to the in-memory data structure, and shares most of the same source code.
 
 ### Future improvements
-* Front end - functionality is pretty minimal at this point.  The page styles could use some work, there's no validation of user input yet, and there may be abetter graph library to use for displaying very large graphs.
+* Front end - functionality is pretty minimal at this point.  The page styles could use some work, there's no validation of user input yet, and there may be a better graph library to use for displaying very large graphs.
 * It would be helpful to add an option to allow the user to specify a maximum depth - i.e. for depth 2, "example.com/users" would be valid but "example.com/users/jared" would be ignored.
