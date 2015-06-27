@@ -7,7 +7,7 @@ subdomains - i.e., when crawling "example.com", it will ignore "sub.example.com"
 
 This project contains a JettyServer.java file with a main method that starts up a Jetty server with the web crawler 
 application running at localhost:8080/simple-web-crawler.  This repository contains the entire eclipse project, and 
-requires Gradle for dependency management and assembly.  The easiest way to run it will be to download the contents of the repository and import the existing project into eclipse, and run/debug JettyServer.java as a java application.
+requires Gradle for dependency management and assembly.  The easiest way to run it will be to download the contents of the repository and import the existing project into eclipse (with the Gradle plugin), and run or debug JettyServer.java as a java application.
 
 The web crawler is written in Java, with the a very simple front-end that uses the "graphdracula" JavaScript library
 to display the two directed graphs - the first represents links between pages, and the second represents the static 
