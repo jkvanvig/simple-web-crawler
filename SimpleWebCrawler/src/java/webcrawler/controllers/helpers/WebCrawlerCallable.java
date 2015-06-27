@@ -63,8 +63,9 @@ public class WebCrawlerCallable implements Callable<SiteGraphNode> {
     SiteGraphNode siteGraphNode;
     if (siteGraph.contains(relativeUrl) || siteGraph.size() >= maxSize)
       return logger.exit(null);
-    siteGraphNode = siteGraph.addParsedSiteGraphNode(relativeUrl);
-    
+    synchronized (siteGraph) {
+      siteGraphNode = siteGraph.addParsedSiteGraphNode(relativeUrl);
+    }
     // get all script, img, stylesheet, and icon dependencies
     siteGraphHelper.addStaticAssets(siteGraph, siteGraphNode, doc);
     
@@ -79,14 +80,18 @@ public class WebCrawlerCallable implements Callable<SiteGraphNode> {
           !absoluteHref.endsWith(".zip") && !absoluteHref.endsWith(".eps")) {
         logger.trace("Adding link: {}", absoluteHref);
         linkHrefs.add(absoluteHref);
-        siteGraph.addLink(siteGraphNode, siteGraph.addSiteGraphNode(siteGraphHelper.getRelativeUrl(
-            siteGraph.getBaseUrl(), absoluteHref)));
       } else {
         logger.trace("Skipping link: {}", absoluteHref);
       }
     }
     synchronized (urlQueue) {
       urlQueue.addAll(linkHrefs);
+    }
+    synchronized (siteGraph) {
+      for (String linkHref : linkHrefs) {
+        siteGraph.addLink(siteGraphNode, siteGraph.addSiteGraphNode(siteGraphHelper.getRelativeUrl(
+            siteGraph.getBaseUrl(), linkHref)));
+      }
     }
     return logger.exit(siteGraphNode);
   }

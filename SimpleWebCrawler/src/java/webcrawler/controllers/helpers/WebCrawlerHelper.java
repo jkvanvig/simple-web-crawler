@@ -45,15 +45,15 @@ public class WebCrawlerHelper {
     Queue<String> urlQueue = new ConcurrentLinkedQueue<>();
     urlQueue.add(absoluteUrl);
     while (!urlQueue.isEmpty() && siteGraph.size() < maxSize) {
-      while (siteGraph.size() < maxSize && !urlQueue.isEmpty() || pool.getActiveCount() > 0 ||
-          !pool.getQueue().isEmpty()) {
-        if (!urlQueue.isEmpty() && pool.getActiveCount() < POOL_SIZE)
+      boolean isEmpty = false;
+      while (siteGraph.size() < maxSize && !(isEmpty = urlQueue.isEmpty()) ||
+          pool.getActiveCount() > 0 || !pool.getQueue().isEmpty()) {
+        if (!isEmpty && pool.getQueue().size() < POOL_SIZE)
           pool.submit(new WebCrawlerCallable(siteGraphHelper, jsoupHelper, siteGraph, urlQueue,
               maxSize));
       }
-      Thread.sleep(100);
+      Thread.sleep(500);
     }
-    pool.purge();
     logger.exit();
   }
   
