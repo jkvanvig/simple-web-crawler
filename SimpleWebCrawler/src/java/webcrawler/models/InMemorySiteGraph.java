@@ -43,24 +43,25 @@ public class InMemorySiteGraph extends SiteGraph {
   }
   
   @Override
-  public SiteGraphNode addLink(SiteGraphNode node, SiteGraphNode link) {
+  public synchronized SiteGraphNode addLink(SiteGraphNode node, SiteGraphNode link) {
     node.getLinks().add(link);
     return node;
   }
   
   @Override
-  public SiteGraphNode addStaticAssets(SiteGraphNode node, Collection<StaticAsset> staticAsset) {
+  public synchronized SiteGraphNode addStaticAssets(SiteGraphNode node,
+      Collection<StaticAsset> staticAsset) {
     node.getStaticAssets().addAll(staticAsset);
     return node;
   }
   
   @Override
-  public void addInvalidUrl(String relativeUrl) {
+  public synchronized void addInvalidUrl(String relativeUrl) {
     super.invalidUrls.add(relativeUrl);
   }
   
   @Override
-  public SiteGraphNode buildSiteGraphNode(String value, SiteGraphNode parent) {
+  protected  SiteGraphNode buildSiteGraphNode(String value, SiteGraphNode parent) {
     super.totalSize++;
     SiteGraphNode newNode = new SiteGraphNode(value, parent);
     newNode.setLinks(new LinkedHashSet<>());

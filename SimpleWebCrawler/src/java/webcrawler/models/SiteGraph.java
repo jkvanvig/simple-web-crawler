@@ -12,48 +12,40 @@ public abstract class SiteGraph {
   protected long size;
   protected long totalSize;
   
-  public SiteGraphNode getRoot() {
-    return root;
-  }
-  
-  public void setRoot(SiteGraphNode root) {
-    this.root = root;
-  }
-  
-  public Map<String, StaticAsset> getStaticAssetsMap() {
+  public synchronized Map<String, StaticAsset> getStaticAssetsMap() {
     return staticAssetsMap;
   }
   
-  public void setStaticAssetsMap(Map<String, StaticAsset> staticAssetsMap) {
+  public synchronized void setStaticAssetsMap(Map<String, StaticAsset> staticAssetsMap) {
     this.staticAssetsMap = staticAssetsMap;
   }
   
-  public Set<String> getInvalidUrls() {
+  public synchronized Set<String> getInvalidUrls() {
     return invalidUrls;
   }
   
-  public void setInvalidUrls(Set<String> invalidUrls) {
+  public synchronized void setInvalidUrls(Set<String> invalidUrls) {
     this.invalidUrls = invalidUrls;
   }
   
-  public long size() {
+  public synchronized long size() {
     return size;
   }
   
-  public long totalSize() {
+  public synchronized long totalSize() {
     return totalSize;
   }
   
-  public String getBaseUrl() {
+  public synchronized String getBaseUrl() {
     return root.getValue();
   }
   
-  public boolean contains(String relativeUrl) {
+  public synchronized boolean contains(String relativeUrl) {
     SiteGraphNode node = findSiteGraphNode(relativeUrl);
     return node != null && node.isParsedPage();
   }
   
-  public SiteGraphNode findSiteGraphNode(String relativeUrl) {
+  public synchronized SiteGraphNode findSiteGraphNode(String relativeUrl) {
     SiteGraphNode node = findSiteGraphNode(relativeUrl, root);
     return node;
   }
@@ -70,12 +62,12 @@ public abstract class SiteGraph {
         node.getSubNodes().get(relativeUrl.substring(0, slash)));
   }
   
-  public SiteGraphNode addSiteGraphNode(String relativeUrl) {
+  public synchronized SiteGraphNode addSiteGraphNode(String relativeUrl) {
     root = addSiteGraphNode(relativeUrl, root, false);
     return findSiteGraphNode(relativeUrl);
   }
   
-  public SiteGraphNode addParsedSiteGraphNode(String relativeUrl) {
+  public synchronized SiteGraphNode addParsedSiteGraphNode(String relativeUrl) {
     root = addSiteGraphNode(relativeUrl, root, true);
     return findSiteGraphNode(relativeUrl);
   }
@@ -83,7 +75,7 @@ public abstract class SiteGraph {
   protected abstract SiteGraphNode addSiteGraphNode(String relativeUrl, SiteGraphNode node,
       boolean parsed);
   
-  public String toHtml() {
+  public synchronized String toHtml() {
     StringBuilder sb = new StringBuilder("<ul>\n");
     toHtml(root, sb, "", "");
     return sb.append("</ul>").toString();
@@ -103,7 +95,7 @@ public abstract class SiteGraph {
   }
   
   @Override
-  public String toString() {
+  public synchronized String toString() {
     StringBuilder sb = new StringBuilder();
     toString(root, sb, "", "");
     return sb.toString();
@@ -119,7 +111,7 @@ public abstract class SiteGraph {
           indent + "\t");
   }
   
-  public Collection<DirectedEdge> linksDirectedEdges() {
+  public synchronized Collection<DirectedEdge> linksDirectedEdges() {
     Set<DirectedEdge> edges = new LinkedHashSet<DirectedEdge>();
     linksDirectedEdges(this.root, edges);
     return edges;
@@ -138,7 +130,7 @@ public abstract class SiteGraph {
       linksDirectedEdges(subNode, edges);
   }
   
-  public Collection<DirectedEdge> staticAssetsDirectedEdges() {
+  public synchronized Collection<DirectedEdge> staticAssetsDirectedEdges() {
     Set<DirectedEdge> edges = new LinkedHashSet<DirectedEdge>();
     staticAssetsDirectedEdges(this.root, edges);
     return edges;
@@ -158,7 +150,7 @@ public abstract class SiteGraph {
       staticAssetsDirectedEdges(subNode, edges);
   }
   
-  public abstract SiteGraphNode buildSiteGraphNode(String value, SiteGraphNode parent);
+  protected abstract SiteGraphNode buildSiteGraphNode(String value, SiteGraphNode parent);
   
   public abstract SiteGraphNode addLink(SiteGraphNode node, SiteGraphNode link);
   

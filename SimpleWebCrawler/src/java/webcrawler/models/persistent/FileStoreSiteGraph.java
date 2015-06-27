@@ -53,7 +53,7 @@ public class FileStoreSiteGraph extends SiteGraph {
   }
   
   @Override
-  public SiteGraphNode buildSiteGraphNode(String value, SiteGraphNode parent) {
+  protected SiteGraphNode buildSiteGraphNode(String value, SiteGraphNode parent) {
     super.totalSize++;
     SiteGraphNode newNode = new SiteGraphNode(value, parent);
     newNode.setLinks(mapDB.getHashSet("links_" + newNode.hashCode()));
@@ -64,14 +64,15 @@ public class FileStoreSiteGraph extends SiteGraph {
   }
   
   @Override
-  public SiteGraphNode addLink(SiteGraphNode node, SiteGraphNode link) {
+  public synchronized SiteGraphNode addLink(SiteGraphNode node, SiteGraphNode link) {
     node.getLinks().add(link);
     this.mapDB.commit();
     return node;
   }
   
   @Override
-  public SiteGraphNode addStaticAssets(SiteGraphNode node, Collection<StaticAsset> staticAssets) {
+  public synchronized SiteGraphNode addStaticAssets(SiteGraphNode node,
+      Collection<StaticAsset> staticAssets) {
     for (StaticAsset asset : staticAssets)
       node.getStaticAssets().add(asset);
     this.mapDB.commit();
@@ -79,7 +80,7 @@ public class FileStoreSiteGraph extends SiteGraph {
   }
   
   @Override
-  public void addInvalidUrl(String relativeUrl) {
+  public synchronized void addInvalidUrl(String relativeUrl) {
     super.invalidUrls.add(relativeUrl);
     this.mapDB.commit();
   }

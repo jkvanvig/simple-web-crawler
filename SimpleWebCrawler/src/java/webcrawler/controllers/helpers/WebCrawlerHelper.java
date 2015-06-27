@@ -44,15 +44,12 @@ public class WebCrawlerHelper {
     logger.entry(absoluteUrl, maxSize);
     Queue<String> urlQueue = new ConcurrentLinkedQueue<>();
     urlQueue.add(absoluteUrl);
-    while (!urlQueue.isEmpty() && siteGraph.size() < maxSize) {
-      boolean isEmpty = false;
-      while (siteGraph.size() < maxSize && !(isEmpty = urlQueue.isEmpty()) ||
-          pool.getActiveCount() > 0 || !pool.getQueue().isEmpty()) {
-        if (!isEmpty && pool.getQueue().size() < POOL_SIZE)
-          pool.submit(new WebCrawlerCallable(siteGraphHelper, jsoupHelper, siteGraph, urlQueue,
-              maxSize));
-      }
-      Thread.sleep(500);
+    boolean isEmpty = true;
+    while (siteGraph.size() < maxSize &&
+        (!(isEmpty = urlQueue.isEmpty()) || pool.getActiveCount() > 0 || !pool.getQueue().isEmpty())) {
+      if (!isEmpty && pool.getQueue().size() < POOL_SIZE)
+        pool.submit(new WebCrawlerCallable(siteGraphHelper, jsoupHelper, siteGraph, urlQueue,
+            maxSize));
     }
     logger.exit();
   }

@@ -44,13 +44,13 @@ public class WebCrawlerCallable implements Callable<SiteGraphNode> {
     
     // Initial validation - make sure we haven't already seen this page
     if (!siteGraphHelper.validate(siteGraph, relativeUrl, maxSize))
-      return logger.exit(siteGraph.findSiteGraphNode(relativeUrl));
+      return logger.exit(null);
     
     Response resp = jsoupHelper.connect(absoluteUrl);
     
     // Secondary validation - make sure it didn't redirect to a page we've seen
     if (!siteGraphHelper.revalidate(siteGraph, absoluteUrl, relativeUrl, resp, maxSize))
-      return logger.exit(siteGraph.findSiteGraphNode(relativeUrl));
+      return logger.exit(null);
     
     relativeUrl = siteGraphHelper.getRelativeUrl(siteGraph.getBaseUrl(), resp.url().toString());
     absoluteUrl = resp.url().toString();
@@ -59,9 +59,9 @@ public class WebCrawlerCallable implements Callable<SiteGraphNode> {
     Document doc = jsoupHelper.parseResponse(resp);
     
     SiteGraphNode siteGraphNode;
-    if (siteGraph.contains(relativeUrl) || siteGraph.size() >= maxSize)
-      return logger.exit(null);
     synchronized (siteGraph) {
+      if (siteGraph.contains(relativeUrl) || siteGraph.size() >= maxSize)
+        return logger.exit(null);
       siteGraphNode = siteGraph.addParsedSiteGraphNode(relativeUrl);
     }
     // get all script, img, stylesheet, and icon dependencies
